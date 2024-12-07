@@ -59,17 +59,6 @@ copy_configs() {
     fi
 }
 
-install_grub_theme() {
-    echo "Installing GRUB2 theme..."
-    if [ -d "$REPO_DIR/grub" ]; then
-        sudo cp -r "$REPO_DIR/grub" /boot/grub/themes/
-        sudo grub-mkconfig -o /boot/grub/grub.cfg
-    else
-        echo "Error: GRUB theme directory not found."
-        exit 1
-    fi
-}
-
 configure_sleep_settings() {
     sudo sed -i '/^#IdleAction=/c\IdleAction=suspend' /etc/systemd/logind.conf
     sudo sed -i '/^#IdleActionSec=/c\IdleActionSec=15min' /etc/systemd/logind.conf
@@ -89,7 +78,6 @@ install_oh_my_zsh() {
 
 install_zsh_plugins() {
     git clone https://github.com/zsh-users/zsh-autosuggestions ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-autosuggestions
-    git clone https://github.com/zsh-users/zsh-syntax-highlighting.git ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-syntax-highlighting
 }
 
 
@@ -108,10 +96,6 @@ if [[ "$install_extra" =~ ^[Yy]$ ]]; then
     sudo pacman -S --noconfirm telegram-desktop firefox obsidian keepassxc
 fi
 
-read -p "Do you want to install the GRUB2 theme? (y/n): " install_grub
-if [[ "$install_grub" =~ ^[Yy]$ ]]; then
-    install_grub_theme  # Вставляем установку темы GRUB2
-fi
 
 echo "Cleaning up..."
 rm -rf "$REPO_DIR"
