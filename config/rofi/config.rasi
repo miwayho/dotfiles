@@ -1,0 +1,67 @@
+@import "colors.rasi"
+
+configuration {
+    modi: "drun";
+    show-icons: false;
+    display-drun: "";
+    drun-display-format: "{name}";
+    font: "Fira Code 12";
+}
+
+window {
+    location: center;
+    width: 850px;
+    y-offset: 235px;
+    padding: 10px;
+    border: 0px solid;
+    background-color: var(background);
+}
+
+mainbox {
+    spacing: 10px;
+    padding: 10px;
+    border: 2px solid;
+    border-color: var(border);
+    children: [ "inputbar", "listview" ];
+    
+}
+
+inputbar{
+    padding:                     5px;
+    children:                    ["entry"];
+}
+
+entry {
+    enabled:                     true;
+    text-color:                  var(foreground);
+    placeholder-color:           var(border);
+}
+
+listview {
+    enabled: true;
+    columns: 2;
+    lines: 9;
+    cycle: true;
+    dynamic: true;
+    scrollbar: false;
+    layout: vertical;
+    fixed-height: true;
+    fixed-columns: true;
+    border: 0px solid;
+}
+
+element {
+    enabled: true;
+    padding: 10px;
+    border-color: var(border);
+    text-color: var(foreground);
+}
+
+element selected.normal {
+    background-color: var(background-alt);
+    text-color: var(foreground);
+}
+
+element alternate.normal {
+    background-color: var(background);
+}
