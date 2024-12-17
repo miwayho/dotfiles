@@ -1,0 +1,25 @@
+# ~/.config/betterlockscreenrc
+
+# default options
+display_on=0
+quiet=false
+
+# theme
+font="fira-code"
+ringcolor=FFFCF0
+insidecolor=100F0F
+ringvercolor=FFFCF0
+insidevercolor=100F0F
+ringwrongcolor=100F0F
+insidewrongcolor=AF3029
+timecolor=FFFCF0
+time_format="%H:%M"
+greetercolor=FFFCF0
+keyhlcolor=BC5215
+bshlcolor=AF3029
+veriftext="Verifying"
+verifcolor=FFFCF0
+wrongtext="Failure!"
+wrongcolor=AF3029
+modifcolor=AF3029
+bgcolor=100F0F

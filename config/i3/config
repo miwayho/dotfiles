@@ -1,0 +1,95 @@
+set $mod Mod4
+
+# Font setting
+font pango:Fira Code 12
+
+# Autostart applications
+exec --no-startup-id dunst
+exec --no-startup-id hsetroot -solid "#100F0F"
+exec --no-startup-id picom -b
+exec_always --no-startup-id $HOME/.config/polybar/launch.sh
+exec --no-startup-id /usr/lib/polkit-gnome/polkit-gnome-authentication-agent-1
+
+# Keybindings
+bindsym $mod+F1 exec brightnessctl -c backlight s 10%-
+bindsym $mod+F2 exec brightnessctl -c backlight s +10%
+bindsym $mod+F4 exec --no-startup-id pactl set-sink-volume @DEFAULT_SINK@ -5%
+bindsym $mod+F5 exec --no-startup-id pactl set-sink-volume @DEFAULT_SINK@ +5%
+bindsym $mod+F6 exec --no-startup-id pactl set-sink-mute @DEFAULT_SINK@ toggle
+
+bindsym $mod+w focus right
+bindsym $mod+q focus right
+
+bindsym $mod+space exec "setxkbmap -model pc105 -layout us,ru -option grp:win_space_toggle"
+
+bindsym $mod+Return exec kitty
+bindsym $mod+d exec rofi -show drun
+
+bindsym $mod+p exec ~/.config/rofi/power.sh
+bindsym $mod+l exec ~/.config/rofi/layout.sh
+bindsym $mod+s exec ~/.config/rofi/screenshot.sh
+bindsym $mod+n exec ~/.config/rofi/network.sh
+
+bindsym $mod+Shift+q kill
+bindsym $mod+h split h
+bindsym $mod+v split v
+bindsym $mod+Shift+Left move left
+bindsym $mod+Shift+Down move down
+bindsym $mod+Shift+Up move up
+bindsym $mod+Shift+Right move right
+bindsym $mod+r mode "resize"
+bindsym $mod+Shift+r restart
+
+# Workspaces
+set $workspaces 1 2 3 4 5 6 7 8 9 10
+for_window [class="^.*"] focus
+
+# Bind keys for workspaces
+bindsym $mod+1 workspace number 1
+bindsym $mod+2 workspace number 2
+bindsym $mod+3 workspace number 3
+bindsym $mod+4 workspace number 4
+bindsym $mod+5 workspace number 5
+bindsym $mod+6 workspace number 6
+bindsym $mod+7 workspace number 7
+bindsym $mod+8 workspace number 8
+bindsym $mod+9 workspace number 9
+bindsym $mod+0 workspace number 10
+
+# Move containers to workspaces
+bindsym $mod+Shift+1 move container to workspace number 1
+bindsym $mod+Shift+2 move container to workspace number 2
+bindsym $mod+Shift+3 move container to workspace number 3
+bindsym $mod+Shift+4 move container to workspace number 4
+bindsym $mod+Shift+5 move container to workspace number 5
+bindsym $mod+Shift+6 move container to workspace number 6
+bindsym $mod+Shift+7 move container to workspace number 7
+bindsym $mod+Shift+8 move container to workspace number 8
+bindsym $mod+Shift+9 move container to workspace number 9
+bindsym $mod+Shift+0 move container to workspace number 10
+
+## Resize mode
+mode "resize" {
+    bindsym Left resize shrink width 10 px or 10 ppt
+    bindsym Down resize grow height 10 px or 10 ppt
+    bindsym Up resize shrink height 10 px or 10 ppt
+    bindsym Right resize grow width 10 px or 10 ppt
+
+    # Return to default mode
+    bindsym Return mode "default"
+    bindsym Escape mode "default"
+}
+
+# Window borders
+client.focused      #575653 #575653 #575653 #575653
+client.unfocused    #282726 #282726 #282726 #282726
+
+hide_edge_borders smart
+for_window [class="^.*"] border pixel 0
+for_window [tiling_from="user"] border pixel 3
+for_window [tiling_from="auto"] border pixel 3
+
+# Gaps
+gaps inner 6
+gaps outer 4
+smart_gaps on
