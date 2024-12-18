@@ -7,7 +7,7 @@ CONFIG_DIR="$HOME/.config"
 POLYBAR_DIR="$CONFIG_DIR/polybar"
 MODULES_DIR="$POLYBAR_DIR/modules"
 PROFILE_DIR="$HOME/.mozilla/firefox"
-CHROME_CSS="userChrome.css"
+CHROME_CSS="config/firefox/userChrome.css"
 
 install_yay() { 
     git clone https://aur.archlinux.org/yay-bin.git && cd yay && makepkg -si --noconfirm && cd .. && rm -rf yay
