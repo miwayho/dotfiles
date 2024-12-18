@@ -91,20 +91,45 @@ setup_firefox_userChrome() {
     FULL_PROFILE_PATH="$PROFILE_DIR/$PROFILE"
     CHROME_DIR="$FULL_PROFILE_PATH/chrome"
     USER_JS="$FULL_PROFILE_PATH/user.js"
+    PREFS_JS="$FULL_PROFILE_PATH/prefs.js"
+    EXTENSIONS_DIR="$FULL_PROFILE_PATH/extensions"
 
-    # Create chrome directory and copy userChrome.css if available
+    # Create necessary directories
     mkdir -p "$CHROME_DIR"
-    [[ -f "$REPO_DIR/$CHROME_CSS" ]] && cp "$REPO_DIR/$CHROME_CSS" "$CHROME_DIR/" && \
-        echo "userChrome.css has been installed to $CHROME_DIR" || echo "userChrome.css not found in repository. Skipping."
+    mkdir -p "$EXTENSIONS_DIR"
 
-    # Enable custom styles in Firefox
+    # Copy userChrome.css if available
+    if [[ -f "$REPO_DIR/$CHROME_CSS" ]]; then
+        cp "$REPO_DIR/$CHROME_CSS" "$CHROME_DIR/"
+        echo "userChrome.css has been installed to $CHROME_DIR"
+    else
+        echo "userChrome.css not found in repository. Skipping."
+    fi
+
+    # Enable custom styles in Firefox (add preference to user.js)
     [[ ! -f "$USER_JS" ]] && touch "$USER_JS" && echo "// user.js created to enable custom stylesheets" >> "$USER_JS"
     grep -q 'toolkit.legacyUserProfileCustomizations.stylesheets' "$USER_JS" || \
         echo 'user_pref("toolkit.legacyUserProfileCustomizations.stylesheets", true);' >> "$USER_JS"
 
-    echo "Custom Firefox styles enabled. Restart Firefox to apply changes."
-}
+    # Copy prefs.js if it exists in the repo
+    if [[ -f "$REPO_DIR/config/firefox/prefs.js" ]]; then
+        cp "$REPO_DIR/config/firefox/prefs.js" "$PREFS_JS"
+        echo "prefs.js has been copied to $FULL_PROFILE_PATH."
+    else
+        echo "prefs.js not found in repository. Skipping."
+    fi
 
+    # Copy extension if available (assuming it's a .xpi file or directory)
+    EXTENSION_FILE="$REPO_DIR/config/firefox/extension.xpi"  # Путь к файлу расширения в репозитории
+    if [[ -f "$EXTENSION_FILE" ]]; then
+        cp "$EXTENSION_FILE" "$EXTENSIONS_DIR/"
+        echo "Extension has been copied to $EXTENSIONS_DIR."
+    else
+        echo "Extension file not found in repository. Skipping."
+    fi
+
+    echo "Custom Firefox styles, settings, and extensions enabled. Restart Firefox to apply changes."
+}
 
 main() {
     install_yay
