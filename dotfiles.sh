@@ -6,11 +6,15 @@ CURRENT_USER=$(whoami)
 CONFIG_DIR="$HOME/.config"
 POLYBAR_DIR="$CONFIG_DIR/polybar"
 MODULES_DIR="$POLYBAR_DIR/modules"
+PROFILE_DIR="$HOME/.mozilla/firefox"
+CHROME_CSS="userChrome.css"
 
-install_yay() { git clone https://aur.archlinux.org/yay-bin.git && cd yay && makepkg -si --noconfirm && cd .. && rm -rf yay; }
+install_yay() { 
+    git clone https://aur.archlinux.org/yay-bin.git && cd yay && makepkg -si --noconfirm && cd .. && rm -rf yay
+}
 
 install_packages() {
-    sudo pacman -S --needed --noconfirm xorg xorg-xinit i3-wm hsetroot kitty ueberzug zsh ranger unrar unzip feh rofi neovim polybar ttf-firacode-nerd lightdm lightdm-gtk-greeter maim xclip dunst ttf-fira-code picom polkit-gnome bluez bluez-utils xdotool brightnessctl rsync
+    sudo pacman -S --needed --noconfirm xorg xorg-xinit i3-wm hsetroot kitty ueberzug zsh ranger unrar unzip feh rofi neovim polybar ttf-firacode-nerd lightdm lightdm-gtk-greeter maim xclip dunst ttf-fira-code picom polkit-gnome bluez bluez-utils xdotool brightnessctl rsync firefox
     yay -S --needed --noconfirm bluetuith betterlockscreen visual-studio-code-bin
 }
 
@@ -74,6 +78,34 @@ install_oh_my_zsh() {
     git clone https://github.com/zsh-users/zsh-autosuggestions ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-autosuggestions
 }
 
+
+setup_firefox_userChrome() {
+    PROFILE_DIR="$HOME/.mozilla/firefox"
+    PROFILE=$(grep 'Path=' "$PROFILE_DIR/profiles.ini" | sed 's/^Path=//' | grep '.default-release')
+
+    if [[ -z "$PROFILE" ]]; then
+        echo "Firefox profile not found. Skipping userChrome.css setup."
+        return
+    fi
+
+    FULL_PROFILE_PATH="$PROFILE_DIR/$PROFILE"
+    CHROME_DIR="$FULL_PROFILE_PATH/chrome"
+    USER_JS="$FULL_PROFILE_PATH/user.js"
+
+    # Create chrome directory and copy userChrome.css if available
+    mkdir -p "$CHROME_DIR"
+    [[ -f "$REPO_DIR/$CHROME_CSS" ]] && cp "$REPO_DIR/$CHROME_CSS" "$CHROME_DIR/" && \
+        echo "userChrome.css has been installed to $CHROME_DIR" || echo "userChrome.css not found in repository. Skipping."
+
+    # Enable custom styles in Firefox
+    [[ ! -f "$USER_JS" ]] && touch "$USER_JS" && echo "// user.js created to enable custom stylesheets" >> "$USER_JS"
+    grep -q 'toolkit.legacyUserProfileCustomizations.stylesheets' "$USER_JS" || \
+        echo 'user_pref("toolkit.legacyUserProfileCustomizations.stylesheets", true);' >> "$USER_JS"
+
+    echo "Custom Firefox styles enabled. Restart Firefox to apply changes."
+}
+
+
 main() {
     install_yay
     install_packages
@@ -81,6 +113,7 @@ main() {
     copy_configs
     setup_polybar_modules
     install_oh_my_zsh
+    setup_firefox_userChrome
     read -p "Install additional packages? (1-Yes, 2-No): " install_choice
     [[ "$install_choice" == "1" ]] && sudo pacman -S --noconfirm telegram-desktop firefox obsidian keepassxc
     rm -rf "$REPO_DIR"
