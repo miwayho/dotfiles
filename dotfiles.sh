@@ -131,6 +131,18 @@ setup_firefox_userChrome() {
     fi
 }
 
+enable_tap() {
+sudo mkdir -p /etc/X11/xorg.conf.d && sudo tee <<'EOF' /etc/X11/xorg.conf.d/90-touchpad.conf 1> /dev/null
+Section "InputClass"
+        Identifier "touchpad"
+        MatchIsTouchpad "on"
+        Driver "libinput"
+        Option "Tapping" "on"
+EndSection
+
+EOF
+}
+
 main() {
     install_yay
     install_packages
@@ -139,6 +151,7 @@ main() {
     setup_polybar_modules
     install_oh_my_zsh
     setup_firefox_userChrome
+    enable_tap
     read -p "Install additional packages? (1-Yes, 2-No): " install_choice
     [[ "$install_choice" == "1" ]] && sudo pacman -S --noconfirm telegram-desktop obsidian keepassxc
     rm -rf "$REPO_DIR"
