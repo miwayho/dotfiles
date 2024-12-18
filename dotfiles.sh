@@ -24,7 +24,7 @@ enable_services() {
 }
 
 copy_configs() {
-    rsync -av --exclude polybar "$REPO_DIR/config/" "$CONFIG_DIR/"
+    rsync -av --exclude polybar firefox "$REPO_DIR/config/" "$CONFIG_DIR/"
     mkdir -p "$POLYBAR_DIR" "$MODULES_DIR"
     install -Dm755 "$REPO_DIR/config/polybar/launch.sh" "$POLYBAR_DIR/launch.sh"
     install -Dm644 "$REPO_DIR/config/polybar/config.ini" "$POLYBAR_DIR/config.ini"
@@ -106,7 +106,6 @@ setup_firefox_userChrome() {
         echo "userChrome.css not found in repository. Skipping."
     fi
 
-    # Enable custom styles in Firefox (add preference to user.js)
     [[ ! -f "$USER_JS" ]] && touch "$USER_JS" && echo "// user.js created to enable custom stylesheets" >> "$USER_JS"
     grep -q 'toolkit.legacyUserProfileCustomizations.stylesheets' "$USER_JS" || \
         echo 'user_pref("toolkit.legacyUserProfileCustomizations.stylesheets", true);' >> "$USER_JS"
@@ -119,8 +118,7 @@ setup_firefox_userChrome() {
         echo "prefs.js not found in repository. Skipping."
     fi
 
-    # Copy extension if available (assuming it's a .xpi file or directory)
-    EXTENSION_FILE="$REPO_DIR/config/firefox/extension.xpi"  # Путь к файлу расширения в репозитории
+    EXTENSION_FILE="$REPO_DIR/config/firefox/theme.xpi"
     if [[ -f "$EXTENSION_FILE" ]]; then
         cp "$EXTENSION_FILE" "$EXTENSIONS_DIR/"
         echo "Extension has been copied to $EXTENSIONS_DIR."
