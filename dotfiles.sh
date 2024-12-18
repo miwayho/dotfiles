@@ -8,9 +8,10 @@ POLYBAR_DIR="$CONFIG_DIR/polybar"
 MODULES_DIR="$POLYBAR_DIR/modules"
 PROFILE_DIR="$HOME/.mozilla/firefox"
 CHROME_CSS="config/firefox/userChrome.css"
+CONTENT_CSS="config/firefox/userContent.css"
 
 install_yay() { 
-    git clone https://aur.archlinux.org/yay-bin.git && cd yay && makepkg -si --noconfirm && cd .. && rm -rf yay
+    git clone https://aur.archlinux.org/yay-bin.git && cd yay-bin && makepkg -si --noconfirm && cd .. && rm -rf yay
 }
 
 install_packages() {
@@ -24,7 +25,7 @@ enable_services() {
 }
 
 copy_configs() {
-    rsync -av --exclude polybar firefox "$REPO_DIR/config/" "$CONFIG_DIR/"
+    rsync -av --exclude polybar --exclude firefox "$REPO_DIR/config/" "$CONFIG_DIR/"
     mkdir -p "$POLYBAR_DIR" "$MODULES_DIR"
     install -Dm755 "$REPO_DIR/config/polybar/launch.sh" "$POLYBAR_DIR/launch.sh"
     install -Dm644 "$REPO_DIR/config/polybar/config.ini" "$POLYBAR_DIR/config.ini"
@@ -33,7 +34,7 @@ copy_configs() {
 
 setup_polybar_modules() {
     echo "Select device type:"
-    echo "1 - Laptop | 2 -Desktop"
+    echo "1 - Laptop | 2 - Desktop"
     read -p "Enter the number [1-2]: " device_choice
 
     echo "Select internet type:"
@@ -78,7 +79,6 @@ install_oh_my_zsh() {
     git clone https://github.com/zsh-users/zsh-autosuggestions ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-autosuggestions
 }
 
-
 setup_firefox_userChrome() {
     PROFILE_DIR="$HOME/.mozilla/firefox"
     PROFILE=$(grep 'Path=' "$PROFILE_DIR/profiles.ini" | sed 's/^Path=//' | grep '.default-release')
@@ -93,40 +93,42 @@ setup_firefox_userChrome() {
     USER_JS="$FULL_PROFILE_PATH/user.js"
     PREFS_JS="$FULL_PROFILE_PATH/prefs.js"
     EXTENSIONS_DIR="$FULL_PROFILE_PATH/extensions"
+    EXTENSION_FILE="$REPO_DIR/config/firefox/{2f0596eb-26b7-45bb-addb-ab56eb7c97dc}.xpi"
 
-    # Create necessary directories
     mkdir -p "$CHROME_DIR"
     mkdir -p "$EXTENSIONS_DIR"
 
-    # Copy userChrome.css if available
+    echo "Copying $REPO_DIR/$CHROME_CSS to $CHROME_DIR/"
     if [[ -f "$REPO_DIR/$CHROME_CSS" ]]; then
         cp "$REPO_DIR/$CHROME_CSS" "$CHROME_DIR/"
-        echo "userChrome.css has been installed to $CHROME_DIR"
     else
-        echo "userChrome.css not found in repository. Skipping."
+        echo "Error: $REPO_DIR/$CHROME_CSS not found"
+    fi
+
+    echo "Copying $REPO_DIR/$CONTENT_CSS to $CHROME_DIR/"
+    if [[ -f "$REPO_DIR/$CONTENT_CSS" ]]; then
+        cp "$REPO_DIR/$CONTENT_CSS" "$CHROME_DIR/"
+    else
+        echo "Error: $REPO_DIR/$CONTENT_CSS not found"
     fi
 
     [[ ! -f "$USER_JS" ]] && touch "$USER_JS" && echo "// user.js created to enable custom stylesheets" >> "$USER_JS"
     grep -q 'toolkit.legacyUserProfileCustomizations.stylesheets' "$USER_JS" || \
         echo 'user_pref("toolkit.legacyUserProfileCustomizations.stylesheets", true);' >> "$USER_JS"
 
-    # Copy prefs.js if it exists in the repo
+    echo "Copying $REPO_DIR/config/firefox/prefs.js to $PREFS_JS"
     if [[ -f "$REPO_DIR/config/firefox/prefs.js" ]]; then
         cp "$REPO_DIR/config/firefox/prefs.js" "$PREFS_JS"
-        echo "prefs.js has been copied to $FULL_PROFILE_PATH."
     else
-        echo "prefs.js not found in repository. Skipping."
+        echo "Error: $REPO_DIR/config/firefox/prefs.js not found"
     fi
 
-    EXTENSION_FILE="$REPO_DIR/config/firefox/theme.xpi"
     if [[ -f "$EXTENSION_FILE" ]]; then
+        echo "Copying $EXTENSION_FILE to $EXTENSIONS_DIR/"
         cp "$EXTENSION_FILE" "$EXTENSIONS_DIR/"
-        echo "Extension has been copied to $EXTENSIONS_DIR."
     else
-        echo "Extension file not found in repository. Skipping."
+        echo "Error: Extension file $EXTENSION_FILE not found"
     fi
-
-    echo "Custom Firefox styles, settings, and extensions enabled. Restart Firefox to apply changes."
 }
 
 main() {
@@ -138,7 +140,7 @@ main() {
     install_oh_my_zsh
     setup_firefox_userChrome
     read -p "Install additional packages? (1-Yes, 2-No): " install_choice
-    [[ "$install_choice" == "1" ]] && sudo pacman -S --noconfirm telegram-desktop firefox obsidian keepassxc
+    [[ "$install_choice" == "1" ]] && sudo pacman -S --noconfirm telegram-desktop obsidian keepassxc
     rm -rf "$REPO_DIR"
     echo "Installation complete!"
 }
