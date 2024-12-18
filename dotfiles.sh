@@ -10,7 +10,7 @@ MODULES_DIR="$POLYBAR_DIR/modules"
 install_yay() { git clone https://aur.archlinux.org/yay-bin.git && cd yay && makepkg -si --noconfirm && cd .. && rm -rf yay; }
 
 install_packages() {
-    sudo pacman -S --needed --noconfirm xorg xorg-xinit i3-wm hsetroot kitty ueberzug zsh ranger feh rofi neovim polybar ttf-firacode-nerd lightdm lightdm-gtk-greeter maim xclip dunst ttf-fira-code picom polkit-gnome bluez bluez-utils xdotool brightnessctl rsync
+    sudo pacman -S --needed --noconfirm xorg xorg-xinit i3-wm hsetroot kitty ueberzug zsh ranger atool unrar unzip feh rofi neovim polybar ttf-firacode-nerd lightdm lightdm-gtk-greeter maim xclip dunst ttf-fira-code picom polkit-gnome bluez bluez-utils xdotool brightnessctl rsync
     yay -S --needed --noconfirm bluetuith betterlockscreen visual-studio-code-bin
 }
 
