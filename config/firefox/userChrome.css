@@ -48,17 +48,17 @@
 }
 
 :root{
---tab-border-radius: 6px !important; 
+--tab-border-radius: 3px !important; 
 --NavbarWidth: 43;
 --TabsHeight: 36;
 --TabsBorder: 8;
 --NavbarHeightSmall: calc(var(--TabsHeight) + var(--TabsBorder))}
 
 @media screen and (min-width:1325px)  
-{:root #nav-bar{margin-top: calc(var(--TabsHeight) * -1px - var(--TabsBorder) * 1px)!important; height: calc(var(--TabsHeight) * 1px + var(--TabsBorder) * 1px)} #TabsToolbar{margin-left: calc(1325px / 100 * var(--NavbarWidth)) !important} #nav-bar{margin-right: calc(100vw - calc(1325px / 100 * var(--NavbarWidth))) !important; vertical-align: center !important} #urlbar-container{min-width: 0px !important;  flex: auto !important} toolbarspring{display: none !important}}
+{:root #nav-bar{margin-top: calc(var(--TabsHeight) * -1px - var(--TabsBorder) * 1px)!important; height: calc(var(--TabsHeight) * 1px + var(--TabsBorder) * 1px)} #TabsToolbar{margin-left: calc(1325px / 100 * var(--NavbarWidth)) !important} #nav-bar{margin-right: calc(100vw - calc(1325px / 100 * var(--NavbarWidth))) !important; vertical-align: left !important} #urlbar-container{min-width: 0px !important;  flex: right !important} toolbarspring{display: none !important}}
 
 @media screen and (min-width:950px) and (max-width:1324px) 
-{:root #nav-bar{margin-top: calc(var(--TabsHeight) * -1px - var(--TabsBorder) * 1px) !important; height: calc(var(--TabsHeight) * 1px + var(--TabsBorder) * 1px)} #TabsToolbar{margin-left: calc(var(--NavbarWidth) * 1vw) !important} #nav-bar{margin-right: calc(100vw - calc(var(--NavbarWidth) * 1vw)) !important; vertical-align: center !important} #urlbar-container{min-width: 0px !important;  flex: auto !important} toolbarspring{display: none !important} #TabsToolbar, #nav-bar{transition: margin-top .25s !important}}
+{:root #nav-bar{margin-top: calc(var(--TabsHeight) * -1px - var(--TabsBorder) * 1px) !important; height: calc(var(--TabsHeight) * 1px + var(--TabsBorder) * 1px)} #TabsToolbar{margin-left: calc(var(--NavbarWidth) * 1vw) !important} #nav-bar{margin-right: calc(100vw - calc(var(--NavbarWidth) * 1vw)) !important; vertical-align: left !important} #urlbar-container{min-width: 0px !important;  flex: right !important} toolbarspring{display: none !important} #TabsToolbar, #nav-bar{transition: margin-top .25s !important}}
 
 @media screen and (max-width:949px)
 {:root #nav-bar{padding: 0 5px 0 5px!important; height: calc(var(--NavbarHeightSmall) * 1px) !important} toolbarspring{display: none !important;} #TabsToolbar, #nav-bar{transition: margin-top .25s !important}}
@@ -86,6 +86,10 @@
 #fullscreen-warning {
   border: none !important;
   background: -moz-Dialog !important;
+}
+
+#tabs-newtab-button {
+  display:none !important;
 }
 
 .tabbrowser-tab:not(:hover) .tab-close-button {
@@ -118,4 +122,10 @@
   background: none !important;
   cursor: pointer;
   display: -moz-box !important;
+}
+.tabbrowser-tab .tab-icon-image {
+  display: none !important;
+}
+.tab-throbber{
+  display: none !important;
 }
