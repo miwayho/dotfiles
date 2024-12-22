@@ -1,0 +1,50 @@
+@import "colors.rasi"
+
+configuration {
+    show-icons: false;
+    font: "Fira Code 26";
+}
+
+window {
+    location: center;
+    width: 30%;    
+    enabled: true;
+    padding: 10px;
+    background-color: @background;
+}
+
+mainbox {
+    border: 3px solid;
+    border-color: @border;
+    background-color: @background;
+    children: [ "listview" ];
+}
+
+listview {
+    columns: 4;
+    lines: 1;
+    cycle: true;
+    dynamic: true;
+    layout: vertical;
+    fixed-columns: true;
+    spacing: 0px; 
+    margin: 11px;
+}
+
+element {
+    padding: 15px 0px;
+    background-color: @background;
+    text-color: @foreground;
+}
+
+element-text {
+    background-color: transparent;
+    text-color: @foreground;
+    horizontal-align: 0.5;
+    vertical-align: 0.5;
+}
+
+element selected.normal {
+    background-color: var(background-alt);
+    text-color: var(foreground);
+}
