@@ -11,13 +11,26 @@ FIREFOX_PROFILE_DIR="$HOME/.mozilla/firefox"
 
 # Install YAY package manager
 install_yay() { 
-    git clone https://aur.archlinux.org/yay-bin.git && cd yay-bin && makepkg -si --noconfirm && cd .. && rm -rf yay
+    git clone https://aur.archlinux.org/yay-bin.git && cd yay-bin && makepkg -si --noconfirm
+    cd .. && rm -rf yay-bin
 }
 
 # Install necessary packages
 install_packages() {
-    sudo pacman -S --needed --noconfirm linux-headers pacman-contrib i3-wm zsh ranger atool feh rofi neovim polybar ttf-firacode-nerd kitty lightdm lightdm-gtk-greeter maim xclip dunst picom polkit-gnome bluez bluez-utils xdotool brightnessctl rsync ffmpegthumbnailer unrar unzip firefox
+    sudo pacman -S --needed --noconfirm linux-headers pacman-contrib i3-wm zsh ranger atool feh rofi neovim polybar ttf-fira-code ttf-opensans ttf-firacode-nerd kitty lightdm lightdm-gtk-greeter imagemagick xcolor xclip dunst picom polkit-gnome bluez bluez-utils xdotool brightnessctl rsync ffmpegthumbnailer unrar unzip firefox
     yay -S --needed --noconfirm bluetuith betterlockscreen visual-studio-code-bin
+}
+
+# Prompt for additional packages
+install_additional_packages() {
+    echo "Do you want to install additional packages? (y/n): "
+    read -r install_extra
+
+    if [ "$install_extra" == "y" ]; then
+        yay -S --noconfirm telegram-desktop-bin davinci-resolve
+        sudo pacman -S gimp obs-studio obsidian tdf 
+
+    fi
 }
 
 # Enable necessary services
@@ -29,6 +42,7 @@ enable_services() {
 # Configure system and user settings
 configure_system() {
     copy_configs
+    make_rofi_scripts_executable
     notify_zsh_installation
     install_oh_my_zsh
     configure_dmenu
@@ -82,6 +96,11 @@ copy_configs() {
     cp "$REPO_DIR/config/polybar/modules/volume.ini" "$MODULES_DIR/volume.ini"
 }
 
+# Make all scripts in rofi directory executable
+make_rofi_scripts_executable() {
+    find "$CONFIG_DIR/rofi" -type f -name "*.sh" -exec chmod +x {} \;
+}
+
 # Setup touchpad for laptops
 setup_touchpad() {
     sudo mkdir -p /etc/X11/xorg.conf.d
@@ -122,12 +141,42 @@ configure_dmenu() {
     done
 }
 
+# Prompt to install Poetry
+install_poetry() {
+    echo "Do you want to install Poetry? (y/n): "
+    read -r install_poetry
+
+    if [ "$install_poetry" == "y" ]; then
+        curl -sSL https://install.python-poetry.org | python3 -
+        echo "export PATH=\"$HOME/.local/bin:\$PATH\"" >> "$HOME/.zshrc"
+        export PATH="$HOME/.local/bin:$PATH"
+    else
+        echo "Skipping Poetry installation."
+    fi
+}
+
+# Clean up repository directory after installation
+cleanup() {
+    echo "Do you want to remove the repository directory? (y/n): "
+    read -r remove_repo
+
+    if [ "$remove_repo" == "y" ]; then
+        rm -rf "$REPO_DIR"
+        echo "Repository directory removed."
+    else
+        echo "Repository directory retained."
+    fi
+}
+
 # Main script execution
 main() {
     install_yay
     install_packages
+    install_additional_packages
     enable_services
     configure_system
+    install_poetry
+    cleanup
 }
 
 main

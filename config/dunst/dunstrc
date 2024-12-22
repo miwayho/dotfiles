@@ -1,27 +1,25 @@
 [global]
-width = 370
-height = 100
+width = 300
 frame_color = "#282726"
-separator_color= frame
+separator_color = frame
 origin = top-right
 offset = 25x25
+padding = 14
+horizontal_padding = 14
 font = Fira Code 12
-frame_width = 3
-gaps = true
-gap_size = 5
+show_indicators = no
+mouse_left_click = do_action
+mouse_middle_click = close_current
 
 [urgency_low]
 background = "#1C1B1A"
 foreground = "#FFFCF0"
-timeout = 10
 
 [urgency_normal]
 background = "#1C1B1A"
 foreground = "#FFFCF0"
-timeout = 15
 
 [urgency_critical]
 background = "#1C1B1A"
 foreground = "#FFFCF0"
 frame_color = "#AF3029"
-timeout = 30

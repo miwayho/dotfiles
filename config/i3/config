@@ -19,6 +19,7 @@ bindsym $mod+F4 exec --no-startup-id ~/.config/i3/volume.sh toggle
 bindsym $mod+F5 exec --no-startup-id ~/.config/i3/volume.sh -5%
 bindsym $mod+F6 exec --no-startup-id ~/.config/i3/volume.sh +5%
 
+bindsym $mod+Shift+c exec --no-startup-id xcolor -f hex -s clipboard 
 bindsym $mod+w focus right
 bindsym $mod+q focus right
 
