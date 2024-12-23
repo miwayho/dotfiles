@@ -1,13 +1,16 @@
 #!/usr/bin/env bash
 
 dir="$HOME/.config/rofi"
-theme="horizontal"
+theme="power"
+
+battery_percentage=$(cat /sys/class/power_supply/BAT*/capacity)
 
 options=(
     "󰐥"
     "󰑙"
     "󰿅"
     "󰤄"
+    "󱧥 ${battery_percentage}%"
 )
 
 rofi_cmd() {
@@ -26,7 +29,6 @@ run_cmd() {
         "󰤄") systemctl suspend ;;
     esac
 }
-
 
 chosen=$(run_rofi)
 [[ -n "$chosen" ]] && run_cmd "$chosen"

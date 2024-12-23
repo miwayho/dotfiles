@@ -17,7 +17,7 @@ install_yay() {
 
 # Install necessary packages
 install_packages() {
-    sudo pacman -S --needed --noconfirm linux-headers pacman-contrib i3-wm zsh ranger atool feh rofi neovim polybar ttf-fira-code ttf-opensans ttf-firacode-nerd kitty lightdm lightdm-gtk-greeter imagemagick xcolor xclip dunst picom polkit-gnome bluez bluez-utils xdotool brightnessctl rsync ffmpegthumbnailer unrar unzip firefox
+    sudo pacman -S --needed --noconfirm linux-headers pacman-contrib i3-wm zsh sshfs ranger atool feh rofi neovim polybar ttf-fira-code ttf-opensans ttf-firacode-nerd kitty lightdm lightdm-gtk-greeter imagemagick xclip dunst picom polkit-gnome bluez bluez-utils xdotool brightnessctl rsync ffmpegthumbnailer unrar unzip firefox docker
     yay -S --needed --noconfirm bluetuith betterlockscreen visual-studio-code-bin
 }
 
@@ -27,9 +27,8 @@ install_additional_packages() {
     read -r install_extra
 
     if [ "$install_extra" == "y" ]; then
-        yay -S --noconfirm telegram-desktop-bin davinci-resolve
-        sudo pacman -S gimp obs-studio obsidian tdf 
-
+        yay -S --noconfirm telegram-desktop-bin davinci-resolve tdf
+        sudo pacman -S gimp obs-studio obsidian kicad 
     fi
 }
 
@@ -64,12 +63,12 @@ copy_configs() {
     mkdir -p "$FIREFOX_PROFILE_DIR"
 
     sudo cp -r "$REPO_DIR/lightdm/lightdm-gtk-greeter.conf" /etc/lightdm/lightdm-gtk-greeter.conf
+    install -Dm755 "$REPO_DIR/config/polybar/launch.sh" "$POLYBAR_DIR/launch.sh"
     
     cp -r "$REPO_DIR/.Xresources"* "$HOME"
     cp -r "$REPO_DIR/config/ranger/"* "$HOME/.config/ranger/"
     cp -r "$REPO_DIR/config/firefox/"* "$FIREFOX_PROFILE_DIR"
     
-    cp "$REPO_DIR/config/polybar/launch.sh" "$POLYBAR_DIR/"
     cp "$REPO_DIR/config/polybar/config.ini" "$POLYBAR_DIR/config.ini"
     
     echo "Select device type (1 - Laptop, 2 - Desktop): "
@@ -154,6 +153,13 @@ install_poetry() {
     fi
 }
 
+# Install Docker
+install_docker() {
+    sudo systemctl enable --now docker
+    sudo usermod -aG docker "$USER_NAME"
+}
+
+
 # Clean up repository directory after installation
 cleanup() {
     echo "Do you want to remove the repository directory? (y/n): "
@@ -172,6 +178,7 @@ main() {
     install_yay
     install_packages
     install_additional_packages
+    install_docker
     enable_services
     configure_system
     install_poetry

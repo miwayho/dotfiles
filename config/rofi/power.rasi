@@ -20,7 +20,7 @@ mainbox {
 }
 
 listview {
-    columns: 4;
+    columns: 5;
     lines: 1;
     cycle: true;
     dynamic: true;

@@ -19,7 +19,6 @@ bindsym $mod+F4 exec --no-startup-id ~/.config/i3/volume.sh toggle
 bindsym $mod+F5 exec --no-startup-id ~/.config/i3/volume.sh -5%
 bindsym $mod+F6 exec --no-startup-id ~/.config/i3/volume.sh +5%
 
-bindsym $mod+Shift+c exec --no-startup-id xcolor -f hex -s clipboard 
 bindsym $mod+w focus right
 bindsym $mod+q focus right
 
@@ -32,7 +31,9 @@ bindsym $mod+p exec ~/.config/rofi/power.sh
 bindsym $mod+l exec ~/.config/rofi/layout.sh
 bindsym $mod+s exec ~/.config/rofi/screenshot.sh
 bindsym $mod+n exec ~/.config/rofi/network.sh
-bindsym $mod+b exec ~/.config/i3/battery.sh
+bindsym $mod+b exec --no-startup-id "kitty bluetuith"
+bindsym $mod+a exec --no-startup-id "kitty pulsemixer"
+bindsym $mod+f exec --no-startup-id "kitty ranger"
 
 bindsym $mod+Shift+q kill
 bindsym $mod+h split h
