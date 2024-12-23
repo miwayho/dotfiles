@@ -42,7 +42,7 @@ enable_services() {
 # Configure system and user settings
 configure_system() {
     copy_configs
-    make_rofi_scripts_executable
+    make_scripts_executable
     notify_zsh_installation
     install_oh_my_zsh
     configure_dmenu
@@ -63,17 +63,15 @@ copy_configs() {
     mkdir -p "$HOME/.config/ranger/"
     mkdir -p "$FIREFOX_PROFILE_DIR"
 
-    install -Dm755 "$REPO_DIR/config/polybar/launch.sh" "$POLYBAR_DIR/launch.sh"
     sudo cp -r "$REPO_DIR/lightdm/lightdm-gtk-greeter.conf" /etc/lightdm/lightdm-gtk-greeter.conf
     
     cp -r "$REPO_DIR/.Xresources"* "$HOME"
     cp -r "$REPO_DIR/config/ranger/"* "$HOME/.config/ranger/"
     cp -r "$REPO_DIR/config/firefox/"* "$FIREFOX_PROFILE_DIR"
+    
+    cp "$REPO_DIR/config/polybar/launch.sh" "$POLYBAR_DIR/"
     cp "$REPO_DIR/config/polybar/config.ini" "$POLYBAR_DIR/config.ini"
     
-    chmod +x $CONFIG_DIR/i3/battery.sh
-    chmod +x $CONFIG_DIR/i3/volume.sh
-
     echo "Select device type (1 - Laptop, 2 - Desktop): "
     read -r device_type
 
@@ -96,9 +94,10 @@ copy_configs() {
     cp "$REPO_DIR/config/polybar/modules/volume.ini" "$MODULES_DIR/volume.ini"
 }
 
-# Make all scripts in rofi directory executable
-make_rofi_scripts_executable() {
+# Make all scripts executable
+make_scripts_executable() {
     find "$CONFIG_DIR/rofi" -type f -name "*.sh" -exec chmod +x {} \;
+    find "$CONFIG_DIR/i3" -type f -name "*.sh" -exec chmod +x {} \;
 }
 
 # Setup touchpad for laptops
