@@ -21,6 +21,17 @@ install_packages() {
     yay -S --needed --noconfirm bluetuith betterlockscreen visual-studio-code-bin
 }
 
+# Install necessary DNS configuration
+configure_dns() {
+    sudo tee -a /etc/NetworkManager/NetworkManager.conf > /dev/null <<EOF
+[main]
+dns=none
+EOF
+
+    sudo systemctl restart NetworkManager
+    echo -e "nameserver 1.1.1.1\nnameserver 1.0.0.1" | sudo tee /etc/resolv.conf > /dev/null
+}
+
 # Prompt for additional packages
 install_additional_packages() {
     echo "Do you want to install additional packages? (y/n): "
@@ -159,7 +170,6 @@ install_docker() {
     sudo usermod -aG docker "$USER_NAME"
 }
 
-
 # Clean up repository directory after installation
 cleanup() {
     echo "Do you want to remove the repository directory? (y/n): "
@@ -182,6 +192,7 @@ main() {
     enable_services
     configure_system
     install_poetry
+    configure_dns  # Add this line to configure DNS
     cleanup
 }
 
