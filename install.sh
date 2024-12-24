@@ -38,7 +38,7 @@ install_additional_packages() {
     read -r install_extra
 
     if [ "$install_extra" == "y" ]; then
-        yay -S --noconfirm telegram-desktop-bin davinci-resolve tdf
+        yay -S --noconfirm telegram-desktop-bin
         sudo pacman -S gimp obs-studio obsidian kicad 
     fi
 }
