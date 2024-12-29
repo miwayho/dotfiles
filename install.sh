@@ -17,7 +17,7 @@ install_yay() {
 
 # Install necessary packages
 install_packages() {
-    sudo pacman -S --needed --noconfirm linux-headers pacman-contrib i3-wm zsh sshfs ranger atool feh rofi neovim polybar ttf-fira-code ttf-opensans ttf-firacode-nerd kitty lightdm lightdm-gtk-greeter imagemagick xclip dunst picom polkit-gnome bluez bluez-utils xdotool brightnessctl rsync ffmpegthumbnailer unrar unzip firefox docker
+    sudo pacman -S --needed --noconfirm linux-headers pacman-contrib i3-wm zsh sshfs ranger atool feh rofi neovim polybar ttf-fira-code ttf-firacode-nerd capitaine-cursors kitty lightdm lightdm-gtk-greeter imagemagick xclip dunst picom polkit-gnome bluez bluez-utils xdotool brightnessctl rsync ffmpegthumbnailer unrar unzip firefox docker
     yay -S --needed --noconfirm bluetuith betterlockscreen visual-studio-code-bin
 }
 
@@ -39,7 +39,7 @@ install_additional_packages() {
 
     if [ "$install_extra" == "y" ]; then
         yay -S --noconfirm telegram-desktop-bin
-        sudo pacman -S gimp obs-studio obsidian kicad 
+        sudo pacman -S gimp obs-studio obsidian kicad qbittorrent 
     fi
 }
 
@@ -72,6 +72,7 @@ copy_configs() {
     mkdir -p "$MODULES_DIR"
     mkdir -p "$HOME/.config/ranger/"
     mkdir -p "$FIREFOX_PROFILE_DIR"
+    mkdir -p "$HOME/Pictures/Screenshots"
 
     sudo cp -r "$REPO_DIR/lightdm/lightdm-gtk-greeter.conf" /etc/lightdm/lightdm-gtk-greeter.conf
     install -Dm755 "$REPO_DIR/config/polybar/launch.sh" "$POLYBAR_DIR/launch.sh"
@@ -143,6 +144,16 @@ configure_dmenu() {
         "/usr/share/applications/picom.desktop"
         "/usr/share/applications/ranger.desktop"
         "/usr/share/applications/kitty.desktop"
+        "/usr/share/applications/org.kicad.gerbview.desktop"
+        "/usr/share/applications/org.kicad.eeschema.desktop"
+        "/usr/share/applications/org.kicad.bitmap2component.desktop"
+        "/usr/share/applications/org.kicad.pcbcalculator.desktop"
+        "/usr/share/applications/org.kicad.pcbnew.desktop"
+        "/usr/share/applications/avahi-discover.desktop"
+        "/usr/share/applications/lstopo.desktop"
+        "/usr/share/applications/jshell-java-openjdk.desktop"
+        "/usr/share/applications/jconsole-java-openjdk.desktop"
+
     )
 
     for file in "${dmenu_files[@]}"; do
@@ -157,8 +168,6 @@ install_poetry() {
 
     if [ "$install_poetry" == "y" ]; then
         curl -sSL https://install.python-poetry.org | python3 -
-        echo "export PATH=\"$HOME/.local/bin:\$PATH\"" >> "$HOME/.zshrc"
-        export PATH="$HOME/.local/bin:$PATH"
     else
         echo "Skipping Poetry installation."
     fi
@@ -192,7 +201,7 @@ main() {
     enable_services
     configure_system
     install_poetry
-    configure_dns  # Add this line to configure DNS
+    configure_dns
     cleanup
 }
 
