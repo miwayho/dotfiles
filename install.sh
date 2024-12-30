@@ -143,7 +143,7 @@ configure_dmenu() {
         "/usr/share/applications/rofi.desktop"
         "/usr/share/applications/picom.desktop"
         "/usr/share/applications/ranger.desktop"
-        "/usr/share/applications/kitty.desktop"
+        "/usr/share/applications/com.mitchellh.ghostty.desktop
         "/usr/share/applications/org.kicad.gerbview.desktop"
         "/usr/share/applications/org.kicad.eeschema.desktop"
         "/usr/share/applications/org.kicad.bitmap2component.desktop"
