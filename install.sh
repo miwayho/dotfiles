@@ -120,6 +120,7 @@ Section "InputClass"
     MatchIsTouchpad "on"
     Driver "libinput"
     Option "Tapping" "on"
+    Option "DisableWhileTyping" "0"
 EndSection
 EOF
 }
