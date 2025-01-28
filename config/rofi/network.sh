@@ -2,18 +2,19 @@
 
 scan_networks() {
     nmcli device wifi rescan
+    sleep 1
 }
 
 get_device_status() {
-    nmcli -fields WIFI g | awk '/enabled|disabled/ {print $1}'
+    nmcli radio wifi
 }
 
 get_network_list() {
-    nmcli --fields "SSID,SIGNAL,SECURITY" -t device wifi list | sed "/--/d"
+    nmcli --fields "SSID,SIGNAL,SECURITY" -t device wifi list
 }
 
 get_active_ssid() {
-    nmcli -t -f NAME,TYPE,DEVICE connection show --active | awk -F':' '/802-11-wireless/ {print $1}'
+    nmcli -t -f NAME,TYPE connection show --active | awk -F':' '/wireless/ {print $1}'
 }
 
 format_network_list() {
@@ -22,10 +23,12 @@ format_network_list() {
     local formatted_list=""
 
     while IFS= read -r line; do
-        IFS=':' read -r ssid signal security <<< "$line"
+        IFS=':' read -r ssid signal security <<< "${line//\\:/-}"
+        ssid="${ssid//\\\\/-}"
 
         [[ -z "$ssid" || ! "$signal" =~ ^[0-9]+$ ]] && continue
 
+        local icon=""
         case $signal in
             8[0-9]|9[0-9]|100) icon_signal="󰤪" ;;
             6[0-9]|7[0-9])     icon_signal="󰤧" ;;
@@ -34,7 +37,7 @@ format_network_list() {
             *)                 icon_signal="󰤬" ;;
         esac
 
-        if [[ -z "$security" || "$security" == "--" ]]; then
+        if [[ "$security" == "--" || -z "$security" ]]; then
             case $signal in
                 8[0-9]|9[0-9]|100) icon="󰤨" ;;
                 6[0-9]|7[0-9])     icon="󰤥" ;;
@@ -43,15 +46,14 @@ format_network_list() {
                 *)                 icon="󰤯" ;;
             esac
         else
-            icon=$icon_signal
+            icon="$icon_signal"
         fi
 
-        [[ "$ssid" == "$active_ssid" ]] && icon="$icon  Connected:"
-
+        [[ "$ssid" == "$active_ssid" ]] && icon+="  Connected:"
         formatted_list+="$icon  $ssid|$ssid|$security\n"
     done <<< "$network_list"
 
-    echo -e "$formatted_list"
+    echo -ne "$formatted_list"
 }
 
 get_saved_connections() {
@@ -59,94 +61,93 @@ get_saved_connections() {
 }
 
 main_menu() {
-    local toggle="$1"
-    local formatted_network_list="$2"
-
-    echo -e "$toggle\nAvailable networks                \n$(echo -e "$formatted_network_list" | awk -F'|' '{print $1}')"
+    printf "%s\nAvailable networks                \n%s" "$1" "$2"
 }
 
 handle_wifi_adapter() {
-    local choice="$1"
-
-    case "$choice" in
+    case "$1" in
         "Wifi Adapter                       ")
-            nmcli radio wifi on && scan_networks
-            return 1 ;;
+            nmcli radio wifi on && scan_networks ;;
         "Wifi Adapter                       ")
-            nmcli radio wifi off
-            return 1 ;;
+            nmcli radio wifi off ;;
+        *) return 1 ;;
     esac
-
     return 0
 }
 
 handle_network_selection() {
     local chosen_network="$1"
-    local formatted_network_list="$2"
+    local formatted_list="$2"
     local active_ssid="$3"
     local saved_connections="$4"
 
-    local chosen_entry=$(echo -e "$formatted_network_list" | grep -F "$chosen_network")
-    local chosen_id=$(echo "$chosen_entry" | awk -F'|' '{print $2}')
-    local chosen_security=$(echo "$chosen_entry" | awk -F'|' '{print $3}')
+    local chosen_entry=$(grep -Fm1 -- "$chosen_network" <<< "$formatted_list")
+    IFS='|' read -r _ chosen_id security <<< "$chosen_entry"
 
     if [[ "$chosen_id" == "$active_ssid" ]]; then
-        local action=$(echo -e "󰌾  Disconnect\n󰆴  Forget network" | rofi -dmenu -i -p "${chosen_id} Options:")
+        local action=$(printf "󰌾  Disconnect\n󰆴  Forget network" | rofi -dmenu -i -p "${chosen_id} Options:")
         case "$action" in
             "󰌾  Disconnect")
-                nmcli connection down id "$chosen_id" && notify-send "Disconnected" "Disconnected from \"$chosen_id\"." ||
-                    notify-send "Failed to Disconnect" "Could not disconnect from \"$chosen_id\"." ;;
+                nmcli connection down "$chosen_id"
+                notify-send "${chosen_id}" "Disconnected" ;;
             "󰆴  Forget network")
-                nmcli connection delete id "$chosen_id" && notify-send "Network Deleted" "Removed \"$chosen_id\"." ||
-                    notify-send "Failed to Delete Network" "Could not delete \"$chosen_id\"." ;;
+                nmcli connection delete "$chosen_id"
+                notify-send "${chosen_id}" "Network deleted" ;;
         esac
-    elif echo "$saved_connections" | grep -qw "$chosen_id"; then
-        local action=$(echo -e "  Connect\n󰆴  Forget network" | rofi -dmenu -i -p "${chosen_id} Options:")
+    elif grep -qw "$chosen_id" <<< "$saved_connections"; then
+        local action=$(printf "  Connect\n󰆴  Forget network" | rofi -dmenu -i -p "${chosen_id} Options:")
         case "$action" in
             "  Connect")
-                nmcli connection up id "$chosen_id" && notify-send "Connection Established" "Connected to \"$chosen_id\"." ||
-                    notify-send "Failed to Connect" "Could not connect to \"$chosen_id\"." ;;
+                nmcli connection up "$chosen_id"
+                notify-send "${chosen_id}" "Connected" ;;
             "󰆴  Forget network")
-                nmcli connection delete id "$chosen_id" && notify-send "Network Deleted" "Removed \"$chosen_id\"." ||
-                    notify-send "Failed to Delete Network" "Could not delete \"$chosen_id\"." ;;
+                nmcli connection delete "$chosen_id"
+                notify-send "${chosen_id}" "Network deleted" ;;
         esac
     else
-        local wifi_password=""
-        if [[ -n "$chosen_security" && "$chosen_security" != "--" ]]; then
-            wifi_password=$(rofi -dmenu -p "Password: ")
+        local password=""
+        if [[ "$security" != "--" && -n "$security" ]]; then
+            password=$(rofi -dmenu -p "Password: " -theme-str 'listview { lines: 0; }')
+            [[ -z "$password" ]] && exit 0
         fi
-        nmcli device wifi connect "$chosen_id" ${wifi_password:+password "$wifi_password"} && \
-            notify-send "Connection Established" "Connected to \"$chosen_id\"." ||
-            notify-send "Failed to Connect" "Could not connect to \"$chosen_id\"."
+        
+        if nmcli device wifi connect "$chosen_id" ${password:+password "$password"}; then
+            notify-send "${chosen_id}" "Connected successfully"
+        else
+            [[ $? -ne 0 && -n "$password" ]] && notify-send "${chosen_id}" "Connection failed"
+        fi
     fi
 }
 
 main_loop() {
     while :; do
-        local device_status=$(get_device_status)
-        local toggle="Wifi Adapter                       "
-        [[ "$device_status" == "enabled" ]] && toggle="Wifi Adapter                       "
+        local status=$(get_device_status)
+        local toggle=$([[ "$status" == "enabled" ]] && \
+            echo "Wifi Adapter                       " || \
+            echo "Wifi Adapter                       ")
 
-        local network_list=$(get_network_list)
+        local networks=$(get_network_list)
         local active_ssid=$(get_active_ssid)
-        local formatted_network_list=$(format_network_list "$network_list" "$active_ssid")
-        local saved_connections=$(get_saved_connections)
+        local formatted_list=$(format_network_list "$networks" "$active_ssid")
+        local saved=$(get_saved_connections)
+        local display_list=$(awk -F'|' '{print $1}' <<< "$formatted_list")
 
-        local chosen_network=$(main_menu "$toggle" "$formatted_network_list" | rofi -dmenu -i -selected-row 1 -p "Wi-Fi: " -matching "fuzzy")
+        local chosen=$(main_menu "$toggle" "$display_list" | rofi -dmenu -i -selected-row 1 -p "Wi-Fi: " -matching fuzzy)
 
-        [[ -z "$chosen_network" ]] && exit 0
+        [[ -z "$chosen" ]] && exit 0
 
-        if [[ "$chosen_network" == "Available networks                " ]]; then
+        if [[ "$chosen" == "Available networks                " ]]; then
             scan_networks
             continue
         fi
 
-        if handle_wifi_adapter "$chosen_network"; then
-            handle_network_selection "$chosen_network" "$formatted_network_list" "$active_ssid" "$saved_connections"
+        if [[ "$chosen" == "$toggle" ]]; then
+            handle_wifi_adapter "$chosen" >/dev/null
+        else
+            handle_network_selection "$chosen" "$formatted_list" "$active_ssid" "$saved"
         fi
     done
 }
 
 main_loop
-
 exit 0
