@@ -9,16 +9,16 @@ POLYBAR_DIR="$CONFIG_DIR/polybar"
 MODULES_DIR="$POLYBAR_DIR/modules"
 FIREFOX_PROFILE_DIR="$HOME/.mozilla/firefox"
 
-# Install YAY package manager
-install_yay() { 
-    git clone https://aur.archlinux.org/yay-bin.git && cd yay-bin && makepkg -si --noconfirm
+# Install paru package manager
+install_paru() { 
+    git clone https://aur.archlinux.org/paru-bin.git && cd paru-bin && makepkg -si --noconfirm
     cd .. && rm -rf yay-bin
 }
 
 # Install necessary packages
 install_packages() {
-    sudo pacman -S --needed --noconfirm linux-headers pacman-contrib tlp i3-wm zsh sshfs ranger atool feh rofi neovim polybar ttf-fira-code ttf-firacode-nerd capitaine-cursors ghostty ueberzug lightdm lightdm-gtk-greeter imagemagick xclip dunst picom polkit-gnome bluez bluez-utils xdotool brightnessctl rsync ffmpegthumbnailer unrar unzip firefox docker pulsemixer vlc python-pillow
-    yay -S --needed --noconfirm bluetuith betterlockscreen visual-studio-code-bin
+    sudo pacman -S --needed --noconfirm linux-headers pacman-contrib tlp i3-wm zsh sshfs ranger atool feh rofi neovim polybar ttf-fira-code ttf-firacode-nerd capitaine-cursors wezterm ueberzug lightdm lightdm-gtk-greeter imagemagick xclip dunst picom polkit-gnome bluez bluez-utils xdotool brightnessctl rsync ffmpegthumbnailer unrar unzip firefox pulsemixer vlc python-pillow
+    paru -S --needed --noconfirm bluetuith betterlockscreen visual-studio-code-bin
 }
 
 # Install necessary DNS configuration
@@ -144,7 +144,6 @@ configure_dmenu() {
         "/usr/share/applications/rofi.desktop"
         "/usr/share/applications/picom.desktop"
         "/usr/share/applications/ranger.desktop"
-        "/usr/share/applications/com.mitchellh.ghostty.desktop
         "/usr/share/applications/org.kicad.gerbview.desktop"
         "/usr/share/applications/org.kicad.eeschema.desktop"
         "/usr/share/applications/org.kicad.bitmap2component.desktop"
@@ -174,12 +173,6 @@ install_poetry() {
     fi
 }
 
-# Install Docker
-install_docker() {
-    sudo systemctl enable --now docker
-    sudo usermod -aG docker "$USER_NAME"
-}
-
 # Clean up repository directory after installation
 cleanup() {
     echo "Do you want to remove the repository directory? (y/n): "
@@ -195,10 +188,9 @@ cleanup() {
 
 # Main script execution
 main() {
-    install_yay
+    install_paru
     install_packages
     install_additional_packages
-    install_docker
     enable_services
     configure_system
     install_poetry

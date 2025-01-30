@@ -24,16 +24,16 @@ bindsym $mod+q focus right
 
 bindsym $mod+space exec "setxkbmap -model pc105 -layout us,ru -option grp:win_space_toggle"
 
-bindsym $mod+Return exec ghostty
+bindsym $mod+Return exec wezterm
 bindsym $mod+d exec rofi -show drun
 
 bindsym $mod+p exec ~/.config/rofi/power.sh
 bindsym $mod+l exec ~/.config/rofi/layout.sh
 bindsym $mod+s exec ~/.config/rofi/screenshot.sh
 bindsym $mod+n exec ~/.config/rofi/network.sh
-bindsym $mod+b exec --no-startup-id ghostty -e bluetuith
-bindsym $mod+a exec --no-startup-id ghostty -e pulsemixer
-bindsym $mod+f exec --no-startup-id ghostty -e ranger
+bindsym $mod+b exec --no-startup-id wezterm -e bluetuith
+bindsym $mod+a exec --no-startup-id wezterm -e pulsemixer
+bindsym $mod+f exec --no-startup-id wezterm -e ranger
 
 bindsym $mod+Shift+q kill
 bindsym $mod+h split h
@@ -91,10 +91,10 @@ client.unfocused    #282726 #282726 #282726 #282726
 
 hide_edge_borders smart
 for_window [class="^.*"] border pixel 0
-for_window [tiling_from="user"] border pixel 3
-for_window [tiling_from="auto"] border pixel 3
+for_window [tiling_from="user"] border pixel 2
+for_window [tiling_from="auto"] border pixel 2
 
 # Gaps
-gaps inner 6
-gaps outer 4
+gaps inner 3
+gaps outer 2
 smart_gaps on
