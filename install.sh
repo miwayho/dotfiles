@@ -76,6 +76,8 @@ copy_configs() {
 
     sudo cp -r "$REPO_DIR/lightdm/lightdm-gtk-greeter.conf" /etc/lightdm/lightdm-gtk-greeter.conf
     install -Dm755 "$REPO_DIR/config/polybar/launch.sh" "$POLYBAR_DIR/launch.sh"
+    install -Dm755 "$REPO_DIR/config/polybar/modules/window.sh" "$MODULES_DIR/window.sh"
+
     
     cp -r "$REPO_DIR/.Xresources"* "$HOME"
     cp -r "$REPO_DIR/config/ranger/"* "$HOME/.config/ranger/"
