@@ -140,7 +140,7 @@ configure_dmenu() {
         "/usr/share/applications/rofi-theme-selector.desktop"
         "/usr/share/applications/qv4l2.desktop"
         "/usr/share/applications/qvidcap.desktop"
-        "/usr/share/applications/electron32.desktop"
+        "/usr/share/applications/electron33.desktop"
         "/usr/share/applications/bssh.desktop"
         "/usr/share/applications/bvnc.desktop"
         "/usr/share/applications/rofi.desktop"
