@@ -3,8 +3,9 @@ local wezterm = require 'wezterm'
 return {
   enable_tab_bar = false,
   adjust_window_size_when_changing_font_size = true,
+  warn_about_missing_glyphs = false,
   
-  font = wezterm.font("Fira Code"),
+  font = wezterm.font("FiraCode Nerd Font"),
   font_size = 16.0,
   
   colors = {
