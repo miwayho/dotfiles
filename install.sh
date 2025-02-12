@@ -17,7 +17,7 @@ install_yay() {
 
 # Install necessary packages
 install_packages() {
-    sudo pacman -S --needed --noconfirm linux-headers jq pacman-contrib tlp i3-wm zsh sshfs ranger atool feh rofi neovim polybar ttf-fira-code ttf-firacode-nerd capitaine-cursors wezterm ueberzug lightdm lightdm-gtk-greeter imagemagick xclip dunst picom polkit-gnome bluez bluez-utils xdotool brightnessctl rsync ffmpegthumbnailer unrar unzip firefox pulsemixer vlc python-pillow
+    sudo pacman -S --needed --noconfirm linux-headers jq pacman-contrib tlp i3-wm zsh sshfs ranger atool feh rofi neovim polybar ttf-fira-code ttf-firacode-nerd capitaine-cursors wezterm ueberzug lightdm lightdm-gtk-greeter imagemagick xclip dunst picom polkit-gnome bluez bluez-utils xdotool brightnessctl rsync ffmpegthumbnailer unrar unzip firefox pulsemixer vlc pyenv python-pillow
     yay -S --needed --noconfirm bluetuith betterlockscreen visual-studio-code-bin
 }
 
