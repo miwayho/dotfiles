@@ -18,7 +18,7 @@ install_yay() {
 # Install necessary packages
 install_packages() {
     sudo pacman -S --needed --noconfirm linux-headers jq pacman-contrib tlp i3-wm zsh sshfs ranger atool feh rofi neovim polybar ttf-fira-code ttf-firacode-nerd capitaine-cursors wezterm ueberzug lightdm lightdm-gtk-greeter imagemagick xclip dunst picom polkit-gnome bluez bluez-utils xdotool brightnessctl rsync ffmpegthumbnailer unrar unzip firefox pulsemixer vlc pyenv python-pillow
-    yay -S --needed --noconfirm bluetuith betterlockscreen visual-studio-code-bin
+    yay -S --needed --noconfirm bluetuith betterlockscreen visual-studio-code-bin pyenv-virtualenv
 }
 
 # Install necessary DNS configuration
@@ -163,18 +163,6 @@ configure_dmenu() {
     done
 }
 
-# Prompt to install Poetry
-install_poetry() {
-    echo "Do you want to install Poetry? (y/n): "
-    read -r install_poetry
-
-    if [ "$install_poetry" == "y" ]; then
-        curl -sSL https://install.python-poetry.org | python3 -
-    else
-        echo "Skipping Poetry installation."
-    fi
-}
-
 # Clean up repository directory after installation
 cleanup() {
     echo "Do you want to remove the repository directory? (y/n): "
@@ -195,7 +183,6 @@ main() {
     install_additional_packages
     enable_services
     configure_system
-    install_poetry
     configure_dns
     cleanup
 }
