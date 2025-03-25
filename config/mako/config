@@ -1,0 +1,22 @@
+font=Iosevka 14
+width=350
+padding=16
+margin=25,25,25,25
+border-size=2
+border-color=#282726
+layer=top
+anchor=top-right
+default-timeout=10000
+
+[urgency=low]
+background-color=#1C1B1A
+text-color=#FFFCF0
+
+[urgency=normal]
+background-color=#1C1B1A
+text-color=#FFFCF0
+
+[urgency=high]
+background-color=#1C1B1A
+text-color=#FFFCF0
+border-color=#AF3029
