@@ -1,0 +1,60 @@
+{
+    "position": "bottom",
+    "height": 40,
+	"modules-center": [
+            "clock"
+        ],
+
+	"modules-right": [
+            "bluetooth",
+            "pulseaudio",
+            "network",
+            "battery"
+	],
+    
+    "battery": {
+        "format": "{icon}",
+        "full-at": 80,
+        "format-charging": "{icon}",
+        "states": {
+            "critical": 10
+        },
+        "format-icons": ["󰁺", "󰁼", "󰁾", "󰂁", "󰁹"],
+        "tooltip-format": "{timeTo} | {capacity}%"
+    },
+
+    "network": {
+        "format-wifi": "{icon}",
+        "format-ethernet": "",
+        "format-disconnected": "󰪎",
+        "format-icons": ["󰤯", "󰤟", "󰤢", "󰤥", "󰤨"],
+        "tooltip-format-wifi":"{essid} | Signal Strength: {signalStrength}%"
+    },
+
+    "pulseaudio": {
+        "scroll-step": 1,
+        "format": "{icon}",
+        "format-muted": "󰝟",
+        "format-icons": {
+            "headphone": "󰋋",
+            "default": ["󰕿", "󰖀", "󰕾"]
+        },
+        "on-click": "pactl set-sink-mute @DEFAULT_SINK@ toggle",
+        "tooltip-format": "{volume}%"
+    },
+    
+    "bluetooth":{
+        "format":"󰂯",
+        "format-off": "",
+        "format-disabled": "",
+        "format-connected":"󰂱",
+        "on-click": "wezterm -e bluetuith",
+        "tooltip-format-connected":"{num_connections} Connected \n{device_alias} {device_battery_percentage}%"
+    },
+
+	"clock": {
+        "timezone": "Europe/Moscow",
+        "format": "{:%H:%M%p}",
+        "tooltip-format": "{:%A | %B %d %Y}"
+	}
+}
