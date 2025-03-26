@@ -6,56 +6,33 @@
 
 tooltip {
     font-size: 16px;
-    border-radius: 0px;
+    border-radius: 0;
     border-color: #282726;
     background-color: #1C1B1A;
 }
 
-#clock {
-    color: #FFFCF0
-}
-
-#pulseaudio {
-    margin-right: 18px;
-    color: #FFFCF0;
-}
-
-#pulseaudio.muted {
-    margin-right: 18px;
-    color: #343331;
-}
-
+#clock,
+#language,
+#network,
+#pulseaudio,
 #battery {
-    margin-right: 18px;
     color: #FFFCF0;
+    margin-right: 18px;
 }
 
-#battery.charging {
-    margin-right: 18px;
-    color: #205EA6;
-}
+#battery.charging { color: #205EA6; }
+#battery.warning { color: #D0A215; }
+#battery.critical { color: #AF3029; }
 
-#battery.warning {
-    margin-right: 18px;
-    color: #D0A215;
-}
-
-#battery.critical {
-    margin-right: 18px;
-    color: #AF3029;
-}
-
-#network{
-    margin-right: 18px;
-    color: #FFFCF0;
-}
-
-#bluetooth{
-    margin-right: 18px;
+#bluetooth {
     color: #343331;
+    margin: 0 18px;
 }
+#bluetooth.connected { color: #FFFCF0; }
 
-#bluetooth.connected{
-    margin-right: 18px;
-    color: #FFFCF0;
+#pulseaudio.muted { color: #343331; }
+
+#battery.warning,
+#battery.critical {
+    margin-left: 18px;
 }
