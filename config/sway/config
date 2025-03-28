@@ -48,6 +48,7 @@ mode "default" {
     bindsym $mod+Shift+q kill
     bindsym $mod+Shift+r reload
     bindsym $mod+Shift+space floating toggle
+    floating_modifier $mod normal
     bindsym $mod+r mode resize
 
     bindsym $mod+Left focus left
@@ -97,3 +98,5 @@ mode "resize" {
     bindsym Right resize grow width 20px
     bindsym Escape mode "default"
 }
+
+include @sysconfdir@/sway/config.d/*
