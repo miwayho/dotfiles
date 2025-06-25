@@ -3,7 +3,6 @@ set -e
 
 REPO_DIR=$(pwd)
 CONFIG_DIR="$HOME/.config"
-FIREFOX_PROFILE_DIR="$HOME/.mozilla/firefox"
 
 install_yay() { 
     git clone https://aur.archlinux.org/yay-bin.git
@@ -14,32 +13,26 @@ install_yay() {
 }
 
 install_packages(){
-    sudo pacman -S --noconfirm rsync git wayland mesa xorg-xwayland sway swaybg polkit greetd greetd-tuigreet \
-    waybar fuzzel mako wl-clipboard wezterm ranger neovim ttf-iosevka ttf-iosevka-nerd \
-    ttf-jetbrains-mono ttf-roboto firefox man telegram-desktop kicad grim unzip brightnessctl \
-    bluez bluez-utils pulseaudio-bluetooth
+    sudo pacman -S --noconfirm rsync git wayland mesa amd-ucode vulkan-radeon xorg-xwayland xdg-desktop-portal xdg-desktop-portal-gtk openssh\
+    sway swaybg polkit greetd greetd-tuigreet waybar fuzzel mako wl-clipboard wezterm neovim ttf-iosevka-nerd ttc-iosevka ttf-opensans noto-fonts-cjk\
+    noto-fonts firefox man telegram-desktop kicad grim unzip brightnessctl fish \
+    bluez bluez-utils pipewire-pulse
     
-    yay -S --noconfirm bluetuith
+    yay -S --noconfirm bluetuith 
 }
 
 enable_service() {
     sudo systemctl enable greetd.service
-    sudo systemctl enable bluetooth.service
-}
-
-install_oh_my_zsh() {
-    sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
-    cp "$REPO_DIR/.zshrc" "$HOME/.zshrc"
-    git clone https://github.com/zsh-users/zsh-autosuggestions ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-autosuggestions
+    sudo systemctl enable bluetooth.service 
+    sudo systemctl enable pipewire-pulse.service
 }
 
 copy_configs(){
-    mkdir -p "$HOME/.config/ranger/"
     mkdir -p "$HOME/Pictures/Screenshots"
-    
     rsync -av "$REPO_DIR/config/" "$CONFIG_DIR/"
     chmod +x "$CONFIG_DIR"/fuzzel/*.sh
-    cp -r "$REPO_DIR/firefox/"* "$FIREFOX_PROFILE_DIR"
+
+    gsettings set org.gnome.desktop.interface color-scheme 'prefer-dark'
 }
 
 configure_greetd() {
@@ -61,34 +54,17 @@ Type=Application
 EOF
 }
 
-configure_dmenu() {
-    local dmenu_files=(
-        "/usr/share/applications/avahi-discover.desktop"
-        "/usr/share/applications/electron34.desktop"
-        "/usr/share/applications/org.gnupg.pinentry-qt5.desktop"
-        "/usr/share/applications/org.gnupg.pinentry-qt.desktop"
-        "/usr/share/applications/org.kicad.bitmap2component.desktop"
-        "/usr/share/applications/org.kicad.eeschema.desktop"
-        "/usr/share/applications/org.kicad.gerbview.desktop"
-        "/usr/share/applications/org.kicad.pcbcalculator.desktop"
-        "/usr/share/applications/ranger.desktop"
-        "/usr/share/applications/qv4l2.desktop"
-    )
-
-    for file in "${dmenu_files[@]}"; do
-        echo "NoDisplay=true" | sudo tee -a "$file"
-    done
+install_fish() {
+    chsh -s /usr/bin/fish
 }
 
 main() {
     install_yay
     install_packages
     enable_service
-    install_oh_my_zsh
     copy_configs
     configure_greetd
-    configure_greetd
-    configure_dmenu
+    install_fish
 }
 
 main
