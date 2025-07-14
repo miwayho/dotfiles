@@ -1,0 +1,42 @@
+*{
+  font-family: Iosevka;
+  font-size: 18px;
+  color: rgb(206, 205, 195);
+}
+
+window {
+    border-radius: 5px;
+	background-color: rgb(28, 27, 26);
+    border: 2px solid rgb(64, 62, 60);
+}
+
+#input {
+	background-color: rgb(28, 27, 26);
+    border: none;
+    margin: 5px;
+}
+
+#outer-box {
+  margin: 10px;
+  background-color: rgb(28, 27, 26);
+}
+
+#input:focus {
+    box-shadow: none;
+}
+
+#text {
+  padding: 5px;
+}
+
+#entry {
+    border: none;
+    border-radius: 5px;
+}
+
+#entry:selected {
+    background-color: rgb(40, 39, 38);
+}
+
+#scroll {
+}

@@ -1,0 +1,38 @@
+#waybar {
+    font-family: Iosevka;
+    font-size: 16px;
+    background: #1C1B1A;
+    border-radius: 5px;
+}
+
+tooltip {
+    font-size: 16px;
+    border-radius: 5px;
+    border-color: #282726;
+    background-color: #1C1B1A;
+}
+
+#clock,
+#network,
+#pulseaudio,
+#battery {
+    color: #FFFCF0;
+    margin-right: 18px;
+}
+
+#battery.charging { color: #205EA6; }
+#battery.warning { color: #D0A215; }
+#battery.critical { color: #AF3029; }
+
+#bluetooth {
+    color: #343331;
+    margin: 0px 18px;
+}
+#bluetooth.connected { color: #FFFCF0; }
+
+#pulseaudio.muted { color: #343331; }
+
+#battery.warning,
+#battery.critical {
+    margin-left: 18px;
+}

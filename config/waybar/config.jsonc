@@ -1,0 +1,60 @@
+{
+    "height": 40,
+    "position": "bottom",
+    "margin-bottom": 10,
+    "margin-left": 10,
+    "margin-right": 10,
+    "modules-center": [
+        "clock"
+    ],
+    "modules-left": [
+        "bluetooth",
+        "network"
+    ],
+    "modules-right": [
+        "pulseaudio",
+        "battery"
+    ],
+    "battery": {
+        "format": "{icon}",
+        "format-charging": "{icon}",
+        "format-icons": ["󰁺", "󰁼", "󰁾", "󰂁", "󰁹"],
+        "interval": 30,
+        "states": {
+            "critical": 10
+        },
+        "tooltip-format": "{timeTo} | {capacity}%"
+    },
+    "bluetooth": {
+        "format": "󰂯",
+        "format-connected": "󰂱",
+        "format-disabled": "",
+        "format-off": "",
+        "on-click": "kitty -e bluetuith",
+        "tooltip-format-connected": "{num_connections} Connected \n{device_alias} {device_battery_percentage}%"
+    },
+    "clock": {
+        "format": "{:%I:%M %p}",
+        "interval": 1,
+        "timezone": "Europe/Moscow",
+        "tooltip-format": "{:%A %d %B}"
+    },
+    "network": {
+        "format-disconnected": "󰪎",
+        "format-ethernet": "",
+        "format-icons": ["󰤯", "󰤟", "󰤢", "󰤥", "󰤨"],
+        "format-wifi": "{icon}",
+        "tooltip-format-wifi": "{essid} | Signal Strength: {signalStrength}%"
+    },
+    "pulseaudio": {
+        "format": "{icon}",
+        "format-icons": {
+            "default": ["󰕿", "󰖀", "󰕾"],
+            "headphone": "󰋋"
+        },
+        "format-muted": "󰝟",
+        "on-click": "pactl set-sink-mute @DEFAULT_SINK@ toggle",
+        "scroll-step": 1,
+        "tooltip-format": "{volume}%"
+    },
+}
