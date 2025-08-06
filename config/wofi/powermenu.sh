@@ -1,6 +1,6 @@
 #!/bin/sh
 
-choice=$(printf "Shutdown\nReboot\nLogout\nLock" | wofi --dmenu --no-input)
+choice=$(printf "Shutdown\nReboot\nLogout\nLock" | wofi --dmenu)
 
 case "$choice" in
     "Shutdown") systemctl poweroff ;;
@@ -8,4 +8,3 @@ case "$choice" in
     "Logout") loginctl terminate-user "$USER" ;;
     "Lock") swaylock ;;
 esac
-т
