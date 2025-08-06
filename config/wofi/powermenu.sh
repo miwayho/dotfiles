@@ -1,6 +1,6 @@
 #!/bin/sh
 
-choice=$(printf "Shutdown\nReboot\nLogout\nLock" | wofi --dmenu)
+choice=$(printf "Shutdown\nReboot\nLogout\nLock" | wofi --dmenu -j --height=160)
 
 case "$choice" in
     "Shutdown") systemctl poweroff ;;
