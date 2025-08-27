@@ -16,7 +16,7 @@ install_packages(){
     sudo pacman -S --noconfirm rsync git wayland mesa amd-ucode vulkan-radeon hyprland xorg-xwayland xdg-desktop-portal xdg-desktop-portal-gtk xdg-desktop-portal-wlr openssh\
     qt6-wayland qt5-wayland polkit greetd greetd-tuigreet waybar wofi wl-clipboard alacritty neovim ttf-iosevka-nerd ttc-iosevka ttf-opensans noto-fonts-cjk\
     noto-fonts firefox man telegram-desktop kicad kicad-library kicad-library-3d grim unzip brightnessctl fish \
-    bluez bluez-utils pipewire pipewire-pulse wireplumber
+    bluez bluez-utils pipewire pipewire-pulse wireplumber hyprshot
     
     yay -S --noconfirm bluetuith 
 }
