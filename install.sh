@@ -18,7 +18,7 @@ install_packages(){
     noto-fonts firefox man telegram-desktop kicad kicad-library kicad-library-3d grim unzip brightnessctl fish \
     bluez bluez-utils pipewire pipewire-pulse wireplumber hyprshot
     
-    yay -S --noconfirm bluetuith 
+    yay -S --noconfirm alacritty 
 }
 
 enable_service() {
