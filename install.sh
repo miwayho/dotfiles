@@ -31,8 +31,7 @@ copy_configs(){
     rsync -av "$REPO_DIR/config/" "$CONFIG_DIR/"
     chmod +x "$CONFIG_DIR"/wofi/*.sh
 
-    gsettings set org.gnome.desktop.interface color-scheme 'prefer-dark'
-    gsettings set org.gnome.desktop.interface gtk-theme "flexoki"
+    gsettings set org.gnome.desktop.interface color-scheme prefer-dark
 }
 
 configure_greetd() {
