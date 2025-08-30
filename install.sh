@@ -15,7 +15,7 @@ install_yay() {
 install_packages(){
     sudo pacman -S --noconfirm rsync git wayland mesa amd-ucode vulkan-radeon hyprland xorg-xwayland xdg-desktop-portal xdg-desktop-portal-gtk xdg-desktop-portal-wlr openssh\
     qt6-wayland qt5-wayland polkit greetd greetd-tuigreet waybar wofi wl-clipboard alacritty neovim ttf-iosevka-nerd ttc-iosevka ttf-opensans noto-fonts-cjk\
-    noto-fonts firefox man telegram-desktop kicad kicad-library kicad-library-3d grim unzip brightnessctl fish \
+    noto-fonts firefox man telegram-desktop kicad kicad-library kicad-library-3d grim unzip brightnessctl zsh \
     bluez bluez-utils pipewire pipewire-pulse wireplumber hyprshot gnome-themes-extra zed
 
     yay -S --noconfirm alacritty
@@ -53,8 +53,9 @@ Type=Application
 EOF
 }
 
-install_fish() {
-    chsh -s /usr/bin/fish
+install_shell() {
+    chsh -s /usr/bin/zsh
+    sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)" "" --unattended
 }
 
 main() {
@@ -63,7 +64,7 @@ main() {
     enable_service
     copy_configs
     configure_greetd
-    install_fish
+    install_shell
 }
 
 main
