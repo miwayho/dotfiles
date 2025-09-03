@@ -4,21 +4,19 @@ set -e
 REPO_DIR=$(pwd)
 CONFIG_DIR="$HOME/.config"
 
+install_packages(){
+    sudo pacman -S --noconfirm rsync git wayland mesa amd-ucode vulkan-radeon hyprland xorg-xwayland xdg-desktop-portal xdg-desktop-portal-gtk xdg-desktop-portal-wlr openssh\
+    qt6-wayland qt5-wayland polkit greetd greetd-tuigreet waybar wofi wl-clipboard alacritty neovim ttf-iosevka-nerd ttc-iosevka ttf-opensans noto-fonts-cjk\
+    noto-fonts firefox man telegram-desktop kicad kicad-library kicad-library-3d grim unzip brightnessctl zsh \
+    bluez bluez-utils pipewire pipewire-pulse wireplumber hyprshot gnome-themes-extra zed
+}
+
 install_yay() {
     git clone https://aur.archlinux.org/yay-bin.git
     cd yay-bin
     makepkg -si --noconfirm
     cd ..
     rm -rf yay-bin
-}
-
-install_packages(){
-    sudo pacman -S --noconfirm rsync git wayland mesa amd-ucode vulkan-radeon hyprland xorg-xwayland xdg-desktop-portal xdg-desktop-portal-gtk xdg-desktop-portal-wlr openssh\
-    qt6-wayland qt5-wayland polkit greetd greetd-tuigreet waybar wofi wl-clipboard alacritty neovim ttf-iosevka-nerd ttc-iosevka ttf-opensans noto-fonts-cjk\
-    noto-fonts firefox man telegram-desktop kicad kicad-library kicad-library-3d grim unzip brightnessctl zsh \
-    bluez bluez-utils pipewire pipewire-pulse wireplumber hyprshot gnome-themes-extra zed
-
-    yay -S --noconfirm alacritty
 }
 
 enable_service() {
@@ -30,8 +28,7 @@ enable_service() {
 copy_configs(){
     rsync -av "$REPO_DIR/config/" "$CONFIG_DIR/"
     chmod +x "$CONFIG_DIR"/wofi/*.sh
-
-    gsettings set org.gnome.desktop.interface color-scheme prefer-dark
+    cp -r "$REPO_DIR/.ssh" "$HOME/"
 }
 
 configure_greetd() {
@@ -59,8 +56,8 @@ install_shell() {
 }
 
 main() {
-    install_yay
     install_packages
+    install_yay
     enable_service
     copy_configs
     configure_greetd
