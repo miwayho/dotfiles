@@ -5,19 +5,12 @@ REPO_DIR=$(pwd)
 CONFIG_DIR="$HOME/.config"
 
 install_packages(){
-    sudo pacman -S --noconfirm rsync git wayland mesa amd-ucode vulkan-radeon hyprland xorg-xwayland xdg-desktop-portal xdg-desktop-portal-gtk xdg-desktop-portal-wlr openssh\
-    qt6-wayland qt5-wayland polkit greetd greetd-tuigreet waybar wofi wl-clipboard alacritty neovim ttf-iosevka-nerd ttc-iosevka ttf-opensans noto-fonts-cjk\
-    noto-fonts firefox man telegram-desktop kicad kicad-library kicad-library-3d grim unzip brightnessctl zsh \
-    bluez bluez-utils pipewire pipewire-pulse wireplumber hyprshot gnome-themes-extra zed
+    sudo pacman -S --noconfirm rsync git wayland mesa amd-ucode vulkan-radeon hyprland xorg-xwayland xdg-desktop-portal xdg-desktop-portal-gtk xdg-desktop-portal-wlr\
+    qt6-wayland qt5-wayland polkit greetd greetd-tuigreet waybar wofi wl-clipboard ghostty neovim ttf-iosevka-nerd ttc-iosevka ttf-opensans noto-fonts-cjk\
+    noto-fonts firefox man telegram-desktop kicad grim unzip brightnessctl zsh \
+    bluez bluez-utils pipewire pipewire-pulse wireplumber hyprshot gnome-themes-extra zed bluetui zed
 }
 
-install_yay() {
-    git clone https://aur.archlinux.org/yay-bin.git
-    cd yay-bin
-    makepkg -si --noconfirm
-    cd ..
-    rm -rf yay-bin
-}
 
 enable_service() {
     sudo systemctl enable greetd.service
@@ -57,7 +50,6 @@ install_shell() {
 
 main() {
     install_packages
-    install_yay
     enable_service
     copy_configs
     configure_greetd
